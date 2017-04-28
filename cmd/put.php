@@ -53,7 +53,7 @@ if (!UPLOAD) {
 Step::setUploadDirs (array (
     'js' => array ('js'),
     'css' => array ('css'),
-    'font' => array ('eot', 'svg', 'ttf', 'woff'),
+    'font' => array ('eot', 'svg', 'ttf', 'woff', 'woff2'),
     'img' => array ('png', 'jpg', 'jpeg', 'gif', 'svg'),
     '' => array ('html', 'txt')
   ));
