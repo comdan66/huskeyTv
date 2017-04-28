@@ -177,14 +177,19 @@ html {
         display: inline-block;
         width: 100%;
         font-size: 22px;
-        @include opacity(.85);
         padding-left: 25px + 5px;
         // border: 1px solid rgba(255, 0, 0, .3);
         height: 45px;
         line-height: 45px;
 
         > a {
-          margin-left: 20px;
+          &:first-child {
+            @include opacity(.85);
+          }
+          &:last-child {
+            margin-left: 20px;
+            @include scale(.65);
+          }
         }
 
         + span {
