@@ -50,8 +50,8 @@ html {
     top: 0;
     display: inline-block;
     padding: 0 10px;
-    height: 50px;
-    line-height: 50px;
+    height: 45px + 5px;
+    line-height: 45px + 5px;
     &:before {
       text-align: center;
       margin-right: 5px;
@@ -63,10 +63,10 @@ html {
     float: left;
     cursor: pointer;
     display: inline-block;
-    padding: 0 10px;
+    padding: 0 20px;
     margin-top: 4px + 10px;
-    height: 40px - 4px;
-    line-height: 40px - 4px;
+    height: 45px - 4px;
+    line-height: 45px - 4px;
 
     // border: 1px solid rgba(255, 0, 0, .3);
     z-index: 1;
@@ -89,9 +89,10 @@ html {
       z-index: 3;
       margin-top: 10px;
       font-size: 16px;
-      height: 40px;
-      line-height: 40px;
+      height: 45px;
+      line-height: 45px;
       font-weight: bold;
+      letter-spacing: 1px;
       @include border-top-left-radius(3px);
       @include border-top-right-radius(3px);
     }
@@ -116,7 +117,7 @@ html {
   position: relative;
   display: inline-block;
   width: 100%;
-  height: calc(100% - 40px - 10px);
+  height: calc(100% - 45px - 10px);
 
   > div {
     position: absolute;
@@ -143,6 +144,7 @@ html {
 
 .p1 {
   // padding: 24px;
+  padding-top: 20px;
   .row {
     display: inline-block;
     width: 100%;
@@ -338,9 +340,8 @@ html {
   }
   .labels-group {
     text {
-      font-size: 12px;
-      @include opacity(.75);
+      font-size: 14px;
+      @include opacity(.45);
     }
-    // color: white;
   }
 }
