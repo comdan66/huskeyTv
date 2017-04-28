@@ -52,6 +52,7 @@ html {
     padding: 0 10px;
     height: 45px + 5px;
     line-height: 45px + 5px;
+    font-size: 20px;
     &:before {
       text-align: center;
       margin-right: 5px;
@@ -248,7 +249,7 @@ html {
           + span {
             padding-left: 0;
             font-size: 100px;
-            margin-top: 10px;
+            margin-top: 24px;
             @include text-shadow(0 1px 2px 2px rgba(0, 0, 0, 1.00));
 
             sup {
