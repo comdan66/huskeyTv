@@ -36,22 +36,22 @@ $(function () {
     
     var th = $(this),
         data = [
-          { date:'5', value:0, value2:12 },
-          { date:'6', value:26, value2:16 },
-          { date:'7', value:14, value2:13 },
-          { date:'8', value:67, value2:47 },
-          { date:'9', value:54, value2:54 },
-          { date:'10', value:100, value2:120 },
-          { date:'11', value:11, value2:90 },
-          { date:'12', value:6, value2:60 },
-          { date:'13', value:6, value2:60 },
-          { date:'14', value:6, value2:60 },
-          { date:'15', value:6, value2:60 },
-          { date:'16', value:6, value2:60 },
-          { date:'17', value:6, value2:60 },
-          { date:'18', value:6, value2:60 },
-          { date:'19', value:6, value2:60 },
-          { date:'20', value:6, value2:60 }
+          { date:'5', value:38, value2:106 },
+          { date:'6', value:40, value2:49 },
+          { date:'7', value:77, value2:114 },
+          { date:'8', value:90, value2:96 },
+          { date:'9', value:79, value2:72 },
+          { date:'10', value:70, value2:110 },
+          { date:'11', value:115, value2:144 },
+          { date:'12', value:140, value2:150 },
+          { date:'13', value:47, value2:63 },
+          { date:'14', value:54, value2:56 },
+          { date:'15', value:48, value2:66 },
+          { date:'16', value:69, value2:72 },
+          { date:'17', value:95, value2:87 },
+          { date:'18', value:0, value2:112 },
+          { date:'19', value:0, value2:90 },
+          { date:'20', value:0, value2:52 }
         ]
         ;
 
