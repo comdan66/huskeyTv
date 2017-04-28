@@ -5,6 +5,8 @@
 
 @import "_oa";
 
+@include font-face("cwTeXHei", font-files("cwTeXHei/cwTeXHei-zhonly.eot", "cwTeXHei/cwTeXHei-zhonly.woff2",  "cwTeXHei/cwTeXHei-zhonly.woff", "cwTeXHei/cwTeXHei-zhonly.ttf"));
+
 * {
   &, &:after, &:before {
     vertical-align: top;
@@ -15,20 +17,272 @@
 }
 
 html {
-  min-height: 100%;
+  height: 100%;
 
   body {
     position: relative;
     display: inline-block;
-    text-align: center;
+    text-align: left;
     margin: 0;
     width: 100%;
-    min-height: 100%;
+    height: 100%;
     font-size: medium;
-    font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif,"微軟正黑體", "Microsoft JhengHei";
-    background: white;
-    color: rgba(50, 50, 50, 0.8);
+    font-family: cwTeXHei, Roboto,RobotoDraft,Helvetica,Arial,sans-serif,"微軟正黑體", "Microsoft JhengHei";
+    background: rgba(46, 47, 64, 1.00);
+    color: rgba(241, 241, 241, 1.00);
 
     @include font-smoothing(antialiased);
+  }
+}
+
+#tabs {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  @include clearfix();
+  padding: 0 16px;
+
+  span {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: inline-block;
+    padding: 0 10px;
+    height: 50px;
+    line-height: 50px;
+    &:before {
+      text-align: center;
+      margin-right: 5px;
+    }
+    // border: 1px solid rgba(255, 0, 0, .3);
+  }
+  a {
+    position: relative;
+    float: left;
+    cursor: pointer;
+    display: inline-block;
+    padding: 0 10px;
+    margin-top: 4px + 10px;
+    height: 40px - 4px;
+    line-height: 40px - 4px;
+
+    // border: 1px solid rgba(255, 0, 0, .3);
+    z-index: 1;
+    background-color: rgba(46, 47, 64, 1.00);
+    border: 1px solid rgba(241, 241, 241, 1.00);
+    font-size: 14px;
+    @include opacity(.5);
+    @include transition(opacity .3s);
+    
+    &:first-child {
+      @include border-top-left-radius(3px);
+    }
+    &:last-child {
+      @include border-top-right-radius(3px);
+    }
+
+    &.active {
+      border-bottom: 0;
+      @include opacity(1);
+      z-index: 3;
+      margin-top: 10px;
+      font-size: 16px;
+      height: 40px;
+      line-height: 40px;
+      font-weight: bold;
+      @include border-top-left-radius(3px);
+      @include border-top-right-radius(3px);
+    }
+    + a {
+      margin-left: -1px;
+    }
+  }
+  &:before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: inline-block;
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px solid rgba(241, 241, 241, 1.00);;
+    z-index: 2;
+    @include box-shadow(inset 0 0 5px rgba(39, 40, 34, .300));
+  }
+}
+#panels {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: calc(100% - 40px - 10px);
+
+  > div {
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: rgba(46, 47, 64, 1.00);
+    @include opacity(0);
+    @include transition(opacity .3s);
+    
+    
+    &.active {
+      position: relative;
+      z-index: 2;
+      @include opacity(1);
+    }
+  }
+}
+
+.p1 {
+  // padding: 24px;
+  .row {
+    display: inline-block;
+    width: 100%;
+    // border: 1px solid rgba(255, 0, 0, .3);
+  }
+  .r1 {
+    margin-top: 50px;
+  }
+  .r1, .r2 {
+    margin-left: 24px;
+    width: calc(100% - 24px * 2);
+    height: calc(100% / 3 - 50px / 3);
+    @include clearfix();
+
+    .unit {
+      float: left;
+      display: inline-block;
+      width: calc(100% / 4 + 30px);
+      &:not(:first-child) {
+        width: calc(100% / 4 - 30px / 3);
+      }
+
+      height: 100%;
+      // border: 1px solid rgba(255, 0, 0, .3);
+
+      > span {
+        display: inline-block;
+        width: 100%;
+        // border: 1px solid rgba(255, 0, 0, .3);
+        font-size: 22px;
+        padding-left: 25px + 5px;
+
+        + span {
+          padding-left: 0;
+          font-size: 45px;
+          font-weight: 100;
+          
+          sup {
+            font-size: 22px;
+            padding-top: 8px;
+            display: inline-block;
+            width: 25px;
+            // border: 1px solid rgba(255, 0, 0, .3);
+            color: rgba(255, 107, 102, 1.00);
+            font-weight: 100;
+
+            &.up {
+              color: rgba(149, 255, 138, 1.00);
+            }
+          }
+        }
+      }
+      > div {
+        display: inline-block;
+        width: 100%;
+        margin-top: 32px;
+        @include opacity(.75);
+        @include clearfix();
+        
+        > * {
+          display: inline-block;
+          float: left;
+          font-size: 25px;
+          margin-left: 25px + 5px;
+          font-weight: 300;
+          // + * {
+            // margin-left: 25px + 5px;
+          // }
+          &:before {
+            margin-right: 5px;
+          }
+        }
+      }
+      &:first-child {
+        > span {
+          padding-left: 35px + 5px;
+          + span {
+            padding-left: 0;
+            font-size: 100px;
+            margin-top: 10px;
+            sup {
+              font-size: 30px;
+              padding-top: 16px;
+              width: 35px;
+            }
+          }
+        }
+        > div {
+          margin-top: 0;
+          // border: 1px solid rgba(255, 0, 0, .3);
+          
+          > * {
+            // border: 1px solid rgba(255, 0, 0, .3);
+            font-size: 40px;
+            margin-left: 35px + 5px + 5px;
+            text-align: center;
+            + * {
+              margin-left: 35px;
+            }
+            &:before {
+              display: block;
+              margin-right: 5px;
+              margin-bottom: 5px;
+            }
+          }
+        }
+      }
+    }
+  }
+  .r3 {
+    height: calc(100% / 3 - 50px / 3);
+    padding-bottom: 16px;
+  }
+}
+
+.line-chart {
+  width: 100%;
+  height: 100%;
+  margin: 0 auto; 
+  font-family: "Proxima Nova", sans-serif;
+  position: relative;
+
+  .x-axis .tick line {
+    stroke: white;
+    stroke-dasharray: 5,5;
+    @include opacity(0);
+  }
+  .x-axis path {
+      stroke-width: 1;
+      @include opacity(.5);
+  }
+
+  .x-axis .tick text {
+    font-size: 12px;
+  }
+
+  path {
+    stroke-width: 2;
+    fill: none;
+    &.dashed {
+      stroke-width: 1;
+      stroke-dasharray: 5,5;
+      @include opacity(.5);
+    }
   }
 }
