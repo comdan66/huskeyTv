@@ -189,6 +189,9 @@ html {
           &:last-child {
             margin-left: 20px;
             @include scale(.65);
+            &:first-child {
+              margin-left: 0;
+            }
           }
         }
 
