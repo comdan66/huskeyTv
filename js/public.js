@@ -78,74 +78,34 @@ $(function () {
           percentageX = d3.scale.linear().domain([0, data.length - 1]).range([percentageMargin, 100 - percentageMargin]),
           $container = d3.select(this).append("div"),
 
-        vis = $container
-            .append("svg:svg")
-            .attr("width", w)
-            .attr("height", h)
+        vis = $container.append("svg:svg").attr("width", w).attr("height", h)
 
         xAxis = vis.append("svg:g")
             .attr("class", "x-axis")
             .attr("transform", "translate(" + 0 + "," + (h-yMargin) + ")")
             .attr("stroke", "white")
             .call(
-                d3.svg.axis()
-                .scale(x)
-                .orient("bottom")
-                .ticks(data.length)
-                .tickSize(-h+(yMargin*2), 0, 0)
-                .tickFormat(d3.time.format("%H"))
+              d3.svg.axis()
+              .scale(x)
+              .orient("bottom")
+              .ticks(data.length)
+              .tickSize(-h+(yMargin*2), 0, 0)
+              .tickFormat(d3.time.format("%H"))
             );
 
-        xAxis.selectAll("text") 
-            .style("text-anchor", "middle")
-            .attr("transform", "translate(0,5)")
-            .attr("fill", "white")
-            .attr("stroke-width", "0");
-          
-        xAxis.selectAll(".domain")
-             .attr("d", 'M0,0V0H' + w + 'V0');
-          
-        g = vis.append("svg:g")
-                .attr("stroke", "url(#sparkline-gradient-" + 1 + ")")
-                .attr("fill", "url(#sparkline-gradient-" + 1 + ")"),
-
-        g2 = vis.append("svg:g")
-                .attr("stroke", "url(#sparkline-gradient-" + 2 + ")")
-                .attr("fill", "url(#sparkline-gradient-" + 2 + ")")
-                ;
+        xAxis.selectAll("text").style("text-anchor", "middle").attr("transform", "translate(0,5)").attr("fill", "white").attr("stroke-width", "0");
+        xAxis.selectAll(".domain").attr("d", 'M0,0V0H' + w + 'V0');
+        g = vis.append("svg:g").attr("stroke", "url(#sparkline-gradient-" + 1 + ")").attr("fill", "url(#sparkline-gradient-" + 1 + ")"),
+        g2 = vis.append("svg:g").attr("stroke", "url(#sparkline-gradient-" + 2 + ")").attr("fill", "url(#sparkline-gradient-" + 2 + ")");
   
-        g.append("svg:path").attr("d", d3.svg.line().interpolate("monotone").x(function(d) { return x(d.date); }).y(function(d) { return y(d.value); }) (data))
+        g.append("svg:path").attr("d", d3.svg.line().interpolate("monotone").x(function(d) { return x(d.date); }).y(function(d) { return y(d.value); }) (data));
         g2.append("svg:path").attr("d", d3.svg.line().interpolate("monotone").x(function(d) { return x(d.date); }).y(function(d) { return y(d.value2); }) (data)).attr ('class', 'dashed');
 
-    vis.append("svg:defs").append("svg:linearGradient")
-        .attr("id", "sparkline-gradient-" + 1)
-        .attr("x1", "0%").attr("y1", "0%").attr("x2", "100%").attr("y2", "0%")
-        .attr("gradientUnits", "userSpaceOnUse")
-        .selectAll(".gradient-stop")
-        .data(data)
-        .enter()
-        .append("svg:stop").attr('offset', function(d, i) {
-            return ((percentageX(i))) + "%";
-        }).attr("style", function(d) {
-            return "stop-color:" + gradientY(d.value) + ";stop-opacity:1";
-        });
-  
-    vis.append("svg:defs").append("svg:linearGradient")
-        .attr("id", "sparkline-gradient-" + 2)
-        .attr("x1", "0%").attr("y1", "0%").attr("x2", "100%").attr("y2", "0%")
-        .attr("gradientUnits", "userSpaceOnUse")
-        .selectAll(".gradient-stop")
-        .data(data)
-        .enter()
-        .append("svg:stop").attr('offset', function(d, i) {
-            return ((percentageX(i))) + "%";
-        }).attr("style", function(d) {
-            return "stop-color:" + gradientY(d.value2) + ";stop-opacity:1";
-        });
+    vis.append("svg:defs").append("svg:linearGradient").attr("id", "sparkline-gradient-" + 1).attr("x1", "0%").attr("y1", "0%").attr("x2", "100%").attr("y2", "0%").attr("gradientUnits", "userSpaceOnUse").selectAll(".gradient-stop").data(data).enter().append("svg:stop").attr('offset', function(d, i) { return ((percentageX(i))) + "%"; }).attr("style", function(d) { return "stop-color:" + gradientY(d.value) + ";stop-opacity:1"; });
+    vis.append("svg:defs").append("svg:linearGradient").attr("id", "sparkline-gradient-" + 2).attr("x1", "0%").attr("y1", "0%").attr("x2", "100%").attr("y2", "0%").attr("gradientUnits", "userSpaceOnUse").selectAll(".gradient-stop").data(data).enter().append("svg:stop").attr('offset', function(d, i) { return ((percentageX(i))) + "%"; }).attr("style", function(d) { return "stop-color:" + gradientY(d.value2) + ";stop-opacity:1"; });
+
+    vis.append("svg:g").classed('labels-group', true).selectAll('text').data(data).enter().append('text').classed('label', true).style("text-anchor", "middle").attr("transform", "translate(0,5)").attr("fill", "white").attr("stroke-width", "0").attr({ x: function(d, i) { return x(d.date); }, y: function(d, i) { return y(d.value) - 20; } }).text(function(d, i) { return data[i].value; });
+    vis.append("svg:g").classed('labels-group', true).selectAll('text').data(data).enter().append('text').classed('label', true).style("text-anchor", "middle").attr("transform", "translate(0,5)").attr("fill", "white").attr("stroke-width", "0").attr({ x: function(d, i) { return x(d.date); }, y: function(d, i) { return y(d.value) - 20; } }).text(function(d, i) { return data[i].value; });
   });
 
-  setTimeout (function () {
-    console.error ('xxxxxxxxx');
-    
-  }, 2000);
 });
