@@ -205,14 +205,30 @@ html {
           
           sup {
             font-size: 22px;
-            padding-top: 8px;
+            // padding-top: 8px;
             display: inline-block;
             width: 25px;
             // border: 1px solid rgba(255, 0, 0, .3);
             color: rgba(255, 107, 102, 1.00);
-            font-weight: 100;
-
+            // font-weight: 100;
+            vertical-align: super;
+            
+            &:before {
+              display: inline-block;
+              content: "\ea3e";
+              font-family: "icomoon";
+            }
+            &.eq {
+              &:before {
+                content: "=";
+              }
+              color: rgba(241, 241, 241, 1.00);
+              @include opacity(.5);
+            }
             &.up {
+              &:before {
+                content: "\ea3a";
+              }
               color: rgba(149, 255, 138, 1.00);
             }
           }
@@ -254,7 +270,7 @@ html {
 
             sup {
               font-size: 30px;
-              padding-top: 16px;
+              // padding-top: 16px;
               width: 35px;
             }
           }
