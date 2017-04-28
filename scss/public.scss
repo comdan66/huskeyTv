@@ -154,15 +154,15 @@ html {
   .r1, .r2 {
     margin-left: 24px;
     width: calc(100% - 24px * 2);
-    height: calc(100% / 3 - 50px / 3);
+    height: calc(100% / 3 - 50px / 3 - 100px / 2);
     @include clearfix();
 
     .unit {
       float: left;
       display: inline-block;
-      width: calc(100% / 4 + 30px);
+      width: calc(100% / 9 * 3);
       &:not(:first-child) {
-        width: calc(100% / 4 - 30px / 3);
+        width: calc(100% / 9 * 2);
       }
 
       height: 100%;
@@ -254,7 +254,7 @@ html {
   }
   .r3 {
     position: relative;
-    height: calc(100% / 3 - 50px / 3);
+    height: calc(100% / 3 - 50px / 3 + 100px);
     padding-bottom: 16px;
     
     .desc {
