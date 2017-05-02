@@ -195,7 +195,7 @@ html {
           padding-left: 0;
           font-size: 45px;
           font-weight: 300;
-          font-family: Lato;
+          // font-family: Lato;
           > b {
             font-weight: 300;
           }
@@ -241,7 +241,7 @@ html {
           @include opacity(.85);
           margin-left: 25px + 5px;
           font-weight: 400;
-          font-family: Lato;
+          // font-family: Lato;
           &:before {
             margin-right: 5px;
             font-family: "icomoon";
@@ -269,7 +269,7 @@ html {
           
           > * {
             font-size: 40px;
-            margin-left: 35px + 5px + 5px;
+            margin-left: 35px + 5px;
             text-align: center;
             + * {
               margin-left: 35px;

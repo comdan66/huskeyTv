@@ -53,7 +53,7 @@ $(function () {
           $('<a />').text (t.name)).append (
           t.icon == '00' ? null : $('<a />').addClass ('img-w img-w-d' + t.icon))).append (
         $('<span />').append (
-          $('<sup />').addClass (t.order != t.lorder ? t.order > t.lorder ? 'up' : '' : 'eq')).append (
+          $('<sup />').addClass (t.sup)).append (
           $('<b>').text (t.order))).append (
         $('<div />').append (
           $('<span />').addClass ('icon-ic_store').text (t.store)).append (
@@ -66,7 +66,7 @@ $(function () {
       $('<span />').append (
         $('<a/>').text (r.all.name))).append (
       $('<span />').append (
-        $('<sup />').addClass (r.all.order != r.all.lorder ? r.all.order > r.all.lorder ? 'up' : '' : 'eq')).append (
+        $('<sup />').addClass (r.all.sup)).append (
         $('<b/>').text (r.all.order)));
 
     $unit.all2.empty ().append (
