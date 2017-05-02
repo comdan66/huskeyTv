@@ -37,6 +37,10 @@ $(function () {
   var $p2 = $('.p2');
   var _vms = [];
   var _isInMaps = false;
+  var _loop = 30 * 1000;
+  var _delay = 60 * 1000;
+  var _nowDelay = 0;
+  var _t = 0;
 
   // array 1d to nd
   function f1d2n (l, c) { var arr = []; for (var i = 0; i < l.length; i++) if (typeof arr[parseInt (i / c, 10)] == 'undefined') arr[parseInt (i / c, 10)] = [l[i]]; else arr[parseInt (i / c, 10)][i % c] = l[i]; return arr; }
@@ -150,23 +154,38 @@ $(function () {
     });
   }
 
-  $('#tabs a').click (function () {
+  $('#tabs a').click (function (e) {
     $loading.removeClass ('h');
     $(this).addClass ('active').siblings ().removeClass ('active');
     $('#panels > div').eq ($(this).index ()).addClass ('active').siblings ().removeClass ('active');
     eval ('update_page_' + $(this).index () + '();');
-  }).eq (0).click ();
+
+    if (e.originalEvent) {
+      loop (true);
+    }
+  });
 
   google.maps.event.addDomListener (window, 'load', function () {
     if (_isInMaps !== false) init_maps (_isInMaps);
     else _isInMaps = true;
   });
 
-  setInterval (function () {
-    var l = $('#tabs a').length;
-    var n = $('#tabs a.active').index ();
-    
-    if (n + 1 < l) $('#tabs a.active').next ().click ();
-    else $('#tabs a').first ().click ();
-  }, 30 * 1000);
+  function loop (ori) {
+    clearTimeout (_t);
+    _t = null;
+
+    if (ori !== true) {
+      var l = $('#tabs a').length;
+      var n = $('#tabs a.active').index ();
+      
+      if (n != -1 && n + 1 < l) $('#tabs a.active').next ().click ();
+      else $('#tabs a').first ().click ();
+      _t = setTimeout (loop, _loop);
+    }
+    else {
+      _t = setTimeout (loop, _delay);
+    }
+  }
+
+  loop ();
 });
