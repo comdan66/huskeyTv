@@ -18,94 +18,103 @@ if(t==e.dx){for((r||f>e.dy)&&(f=e.dy);++u<o;)i=n[u],i.x=a,i.y=c,i.dy=f,a+=i.dx=M
  */
 
 $(function () {
+  var api_0 = 'http://alley.ioa.tw/api/tv/v3';
+
+  var $unit = {
+    taipei: $('.unit.taipei'),
+    hsinchu: $('.unit.hsinchu'),
+    taichung: $('.unit.taichung'),
+    tainan: $('.unit.tainan'),
+    kaohsiung: $('.unit.kaohsiung'),
+    other: $('.unit.other'),
+    all1: $('.unit.all1'),
+    all2: $('.unit.all2'),
+  };
+  var $online = $('#online');
+  var $lineChart = $('#line-chart')
+
+  function update_units (r) {
+    var all = r.areas.map (function (t) {
+      if (typeof $unit[t.class] === 'undefined') return [0, 0, 0, 0];
+      
+      $unit[t.class].empty ().append (
+        $('<span />').append (
+          $('<a />').text (t.name)).append (
+          t.icon == '00' ? null : $('<a />').addClass ('img-w img-w-d' + t.icon))).append (
+        $('<span />').append (
+          $('<sup />').addClass (t.order != t.lorder ? t.order > t.lorder ? 'up' : '' : 'eq')).append (
+          $('<b>').text (t.order))).append (
+        $('<div />').append (
+          $('<span />').addClass ('icon-ic_store').text (t.store)).append (
+          $('<span />').addClass ('icon-ic_redeem').text (t.exchange + '%')));
+
+      return [t.order, t.lorder, t.store, t.exchange];
+    });
+
+    $unit.all1.empty ().append (
+      $('<span />').append (
+        $('<a/>').text (r.all.name))).append (
+      $('<span />').append (
+        $('<sup />').addClass (r.all.order != r.all.lorder ? r.all.order > r.all.lorder ? 'up' : '' : 'eq')).append (
+        $('<b/>').text (r.all.order)));
+
+    $unit.all2.empty ().append (
+      $('<div />').append (
+        $('<span />').addClass ('icon-ic_store').text (r.all.store)).append (
+        $('<span />').addClass ('icon-ic_redeem').text (r.all.exchange + '%')));
+  }
+  function update_line_chart (r) {
+    $lineChart.empty ().each (function (sparklineId) {
+      var data = r.chart,
+          parseDate = d3.time.format ("%H"),
+          w = $(this).width (),
+          h = $(this).height (),
+          xMargin = 20,
+          yMargin = 25;
+
+      data.forEach (function (d) { d.date = parseDate.parse (d.date); d.val = d.val; d.val2 = d.val2; });
+      var mv = data.map (function (t) { return [parseInt (t.val, 10), parseInt (t.val2, 10)].reduce (function(a, b) { return Math.max (a, b); }); }).reduce (function(a, b) { return Math.max (a, b); });;
+          
+      var y = d3.scale.linear ().domain ([0, mv]).range ([h - yMargin, yMargin]),
+          x = d3.time.scale ().domain (d3.extent (data, function (d) { return d.date; })).range ([xMargin, w - xMargin]),
+          gradientY = d3.scale.linear ().domain ([100,0]) .range (['#fde24b','#83f2c2']),
+          percentageMargin = 100 / data.length,
+          percentageX = d3.scale.linear ().domain ([0, data.length - 1]).range ([percentageMargin, 100 - percentageMargin]),
+          $container = d3.select (this).append ('div'),
+          vis = $container.append ('svg:svg').attr ('width', w).attr ('height', h);
+
+      xAxis = vis.append ('svg:g').attr ('class', 'x-axis').attr ('transform', 'translate(' + 0 + ',' + (h - yMargin) + ')').attr ('stroke', 'white').call (d3.svg.axis ().scale (x).orient ('bottom').ticks (data.length).tickSize (-h + (yMargin * 2), 0, 0).tickFormat (d3.time.format ('%H')));
+
+      xAxis.selectAll ('text').style ('text-anchor', 'middle').attr ('transform', 'translate(0,5)').attr ('fill', 'white').attr ('stroke-width', '0');
+      xAxis.selectAll ('.domain').attr ('d', 'M0,0V0H' + w + 'V0');
+      g = vis.append ('svg:g').attr ('stroke', 'url(#sparkline-gradient-' + 1 + ')').attr ('fill', 'url(#sparkline-gradient-' + 1 + ')'),
+      g2 = vis.append ('svg:g').attr ('stroke', 'url(#sparkline-gradient-' + 2 + ')').attr ('fill', 'url(#sparkline-gradient-' + 2 + ')');
+  
+      g.append ('svg:path').attr ('d', d3.svg.line ().interpolate ('monotone').x (function (d) { return x (d.date); }).y (function (d) { return y(d.val); }) (data));
+      g2.append ('svg:path').attr ('d', d3.svg.line ().interpolate ('monotone').x (function (d) { return x (d.date); }).y (function (d) { return y(d.val2); }) (data)).attr ('class', 'dashed');
+
+      vis.append ('svg:defs').append ('svg:linearGradient').attr ('id', 'sparkline-gradient-' + 1).attr ('x1', '0%').attr ('y1', '0%').attr ('x2', '100%').attr ('y2', '0%').attr ('gradientUnits', 'userSpaceOnUse').selectAll ('.gradient-stop').data (data).enter ().append ('svg:stop').attr ('offset', function (d, i) { return percentageX (i) + '%'; }).attr ('style', function (d) { return 'stop-color:' + gradientY (d.val) + ';stop-opacity:1'; });
+      vis.append ('svg:defs').append ('svg:linearGradient').attr ('id', 'sparkline-gradient-' + 2).attr ('x1', '0%').attr ('y1', '0%').attr ('x2', '100%').attr ('y2', '0%').attr ('gradientUnits', 'userSpaceOnUse').selectAll ('.gradient-stop').data (data).enter ().append ('svg:stop').attr ('offset', function (d, i) { return percentageX (i) + '%'; }).attr ('style', function (d) { return 'stop-color:' + gradientY (d.val2) + ';stop-opacity:1'; });
+      vis.append ('svg:g').classed ('labels-group', true).selectAll ('text').data (data).enter ().append ('text').classed ('label', true).style ('text-anchor', 'middle').attr ('transform', 'translate(0,5)').attr ('fill', 'white').attr ('stroke-width', '0').attr ({ x: function (d, i) { return x (d.date); }, y: function (d, i) { return y (d.val) - 20; } }).text (function (d, i) { return data[i].val; });
+    });
+  }
+  function update_page_0 () {
+    $.get (api_0, function (r) {
+      $online.text (r.online);
+      update_units (r);
+      update_line_chart (r);
+      console.error ('x');
+    });
+  }
+  function update_page_1 () {
+    
+  }
+
   $('#tabs a').click (function () {
     $(this).addClass ('active').siblings ().removeClass ('active');
     $('#panels > div').eq ($(this).index ()).addClass ('active').siblings ().removeClass ('active');
+    eval ('update_page_' + $(this).index () + '();');
   }).first ().click ();
-
-
-
-
-
-
-
-
-
-
-  $('.line-chart').each(function(sparklineId) {
-    
-    var th = $(this),
-        data = [
-          { date:'5', value:38, value2:106 },
-          { date:'6', value:40, value2:49 },
-          { date:'7', value:77, value2:114 },
-          { date:'8', value:90, value2:96 },
-          { date:'9', value:79, value2:72 },
-          { date:'10', value:70, value2:110 },
-          { date:'11', value:115, value2:144 },
-          { date:'12', value:140, value2:150 },
-          { date:'13', value:47, value2:63 },
-          { date:'14', value:54, value2:56 },
-          { date:'15', value:48, value2:66 },
-          { date:'16', value:69, value2:72 },
-          { date:'17', value:95, value2:87 },
-          { date:'18', value:0, value2:112 },
-          { date:'19', value:0, value2:90 },
-          { date:'20', value:0, value2:52 }
-        ]
-        ;
-
-      var parseDate = d3.time.format("%H");
-
-      data.forEach(function(d) {
-          d.date = parseDate.parse(d.date);
-          d.value = +d.value;
-          d.value2 = +d.value2;
-      });
-        
-
-      var w = th.width (),
-          h = th.height (),
-          mv = data.map (function (t) { return [parseInt (t.value, 10), parseInt (t.value2, 10)].reduce (function(a, b) { return Math.max (a, b); }); }).reduce (function(a, b) { return Math.max (a, b); });;
-          
-      var xMargin = 20,
-          yMargin = 25,
-          y = d3.scale.linear().domain([0, mv]).range([h - yMargin, yMargin]),
-          x = d3.time.scale().domain(d3.extent(data, function(d) { return d.date; })).range([xMargin, w - xMargin]),
-
-          gradientY = d3.scale.linear().domain([100,0]) .range(['#fde24b','#83f2c2']),
-          percentageMargin = 100 / data.length,
-          percentageX = d3.scale.linear().domain([0, data.length - 1]).range([percentageMargin, 100 - percentageMargin]),
-          $container = d3.select(this).append("div"),
-
-        vis = $container.append("svg:svg").attr("width", w).attr("height", h)
-
-        xAxis = vis.append("svg:g")
-            .attr("class", "x-axis")
-            .attr("transform", "translate(" + 0 + "," + (h-yMargin) + ")")
-            .attr("stroke", "white")
-            .call(
-              d3.svg.axis()
-              .scale(x)
-              .orient("bottom")
-              .ticks(data.length)
-              .tickSize(-h+(yMargin*2), 0, 0)
-              .tickFormat(d3.time.format("%H"))
-            );
-
-        xAxis.selectAll("text").style("text-anchor", "middle").attr("transform", "translate(0,5)").attr("fill", "white").attr("stroke-width", "0");
-        xAxis.selectAll(".domain").attr("d", 'M0,0V0H' + w + 'V0');
-        g = vis.append("svg:g").attr("stroke", "url(#sparkline-gradient-" + 1 + ")").attr("fill", "url(#sparkline-gradient-" + 1 + ")"),
-        g2 = vis.append("svg:g").attr("stroke", "url(#sparkline-gradient-" + 2 + ")").attr("fill", "url(#sparkline-gradient-" + 2 + ")");
   
-        g.append("svg:path").attr("d", d3.svg.line().interpolate("monotone").x(function(d) { return x(d.date); }).y(function(d) { return y(d.value); }) (data));
-        g2.append("svg:path").attr("d", d3.svg.line().interpolate("monotone").x(function(d) { return x(d.date); }).y(function(d) { return y(d.value2); }) (data)).attr ('class', 'dashed');
-
-    vis.append("svg:defs").append("svg:linearGradient").attr("id", "sparkline-gradient-" + 1).attr("x1", "0%").attr("y1", "0%").attr("x2", "100%").attr("y2", "0%").attr("gradientUnits", "userSpaceOnUse").selectAll(".gradient-stop").data(data).enter().append("svg:stop").attr('offset', function(d, i) { return ((percentageX(i))) + "%"; }).attr("style", function(d) { return "stop-color:" + gradientY(d.value) + ";stop-opacity:1"; });
-    vis.append("svg:defs").append("svg:linearGradient").attr("id", "sparkline-gradient-" + 2).attr("x1", "0%").attr("y1", "0%").attr("x2", "100%").attr("y2", "0%").attr("gradientUnits", "userSpaceOnUse").selectAll(".gradient-stop").data(data).enter().append("svg:stop").attr('offset', function(d, i) { return ((percentageX(i))) + "%"; }).attr("style", function(d) { return "stop-color:" + gradientY(d.value2) + ";stop-opacity:1"; });
-
-    vis.append("svg:g").classed('labels-group', true).selectAll('text').data(data).enter().append('text').classed('label', true).style("text-anchor", "middle").attr("transform", "translate(0,5)").attr("fill", "white").attr("stroke-width", "0").attr({ x: function(d, i) { return x(d.date); }, y: function(d, i) { return y(d.value) - 20; } }).text(function(d, i) { return data[i].value; });
-    vis.append("svg:g").classed('labels-group', true).selectAll('text').data(data).enter().append('text').classed('label', true).style("text-anchor", "middle").attr("transform", "translate(0,5)").attr("fill", "white").attr("stroke-width", "0").attr({ x: function(d, i) { return x(d.date); }, y: function(d, i) { return y(d.value) - 20; } }).text(function(d, i) { return data[i].value; });
-  });
 
 });
