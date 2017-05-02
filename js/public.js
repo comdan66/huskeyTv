@@ -19,6 +19,7 @@ if(t==e.dx){for((r||f>e.dy)&&(f=e.dy);++u<o;)i=n[u],i.x=a,i.y=c,i.dy=f,a+=i.dx=M
 
 $(function () {
   var api_0 = 'http://alley.ioa.tw/api/tv/v3';
+  var api_1 = 'http://alley.ioa.tw/api/tv/heatmaps';
 
   var $unit = {
     taipei: $('.unit.taipei'),
@@ -32,8 +33,13 @@ $(function () {
   };
   var $online = $('#online');
   var $loading = $('#loading');
-  var $lineChart = $('#line-chart')
+  var $lineChart = $('#line-chart');
+  var $p2 = $('.p2');
+  var _vms = [];
+  var _isInMaps = false;
 
+  // array 1d to nd
+  function f1d2n (l, c) { var arr = []; for (var i = 0; i < l.length; i++) if (typeof arr[parseInt (i / c, 10)] == 'undefined') arr[parseInt (i / c, 10)] = [l[i]]; else arr[parseInt (i / c, 10)][i % c] = l[i]; return arr; }
   function update_units (r) {
     var all = r.areas.map (function (t) {
       if (typeof $unit[t.class] === 'undefined') return [0, 0, 0, 0];
@@ -106,12 +112,42 @@ $(function () {
       update_line_chart (r);
       
       $loading.addClass ('h');
-
-      console.error ('x');
     });
   }
+  function init_maps (cb) {
+    if (_isInMaps === false) { _isInMaps = cb; return false; }
+
+    _vms = $p2.find ('.maps > div').map (function (t) {
+      var vm = new google.maps.Map ($(this).get (0), { zoom: $(this).data ('zoom') ? $(this).data ('zoom') : 16, center: new google.maps.LatLng ($(this).data ('lat') ? $(this).data ('lat') : 25.056678157775092, $(this).data ('lng') ? $(this).data ('lng') : 121.53488159179688), disableDefaultUI: true, gestureHandling: 'greedy'});
+      vm.mapTypes.set ('s1', new google.maps.StyledMapType ([{stylers: [{gamma: 0.7}, {weight: 1}, {saturation: 10}]}, {featureType: 'administrative', elementType: 'geometry.fill', stylers: [{'visibility': 'simplified', 'color': '#000000'}]}, {featureType: 'administrative', elementType: 'geometry.stroke', stylers: [{'visibility': 'simplified', 'color': '#144b53'},{'lightness': 14},{'weight': 1.4}]}, {featureType: 'all', stylers: [{ visibility: 'on' }]}, {featureType: 'landscape', stylers: [{ visibility: 'on' }]}, {featureType: 'poi', stylers: [{ visibility: 'off' }]}, {featureType: 'road', stylers: [{ visibility: 'simplified' }]}, {featureType: 'road.arterial', stylers: [{ visibility: 'on' }]}, {featureType: 'transit', stylers: [{ visibility: 'off' }]}, {featureType: 'water', stylers: [{ color: '#b3d1ff', visibility: 'on' }]}, {elementType: "labels.icon", stylers:[{ visibility: 'off' }]}]));
+      vm.setMapTypeId ('s1');
+      vm.addListener ('idle', function () { if (window.tool) console.error (this.zoom, this.center.lat (), this.center.lng ()); });
+      vm._h = new google.maps.visualization.HeatmapLayer ({ data: f1d2n ($(this).data ('data'), 2).map (function (t, i) { return new google.maps.LatLng (t[0] / Math.pow (10, 6) + 23, t[1] / Math.pow (10, 6) + 120); }), map: vm, radius: 20, opacity: 0.75 });
+      return vm;
+    });
+
+    cb && cb ();
+  }
   function update_page_1 () {
-    $loading.addClass ('h');
+    _vms = _vms.map (function (i, t) {
+      t._h.setMap (null);
+      t._h = null;
+      delete t._h;
+      t = null;
+      delete t;
+      return null;
+    }).filter (function (t) { return t; });
+
+    $.get (api_1, function (r) {
+      $p2.empty ().attr ('class', 'p2 active n' + r.length).append (r.map (function (t) {
+        return $('<div />').addClass ('maps').append (
+          $('<div />').data ('data', t.data).data ('lat', t.lat).data ('lng', t.lng).data ('zoom', t.zoom)).append (
+          $('<span />').append (
+            t.icon == '00' ? null : $('<a />').addClass ('img-w img-w-d' + t.icon)).append (
+            $('<b />').text (t.name))); }));
+
+      init_maps (function () { $loading.addClass ('h'); });
+    });
   }
 
   $('#tabs a').click (function () {
@@ -120,6 +156,17 @@ $(function () {
     $('#panels > div').eq ($(this).index ()).addClass ('active').siblings ().removeClass ('active');
     eval ('update_page_' + $(this).index () + '();');
   }).eq (0).click ();
-  
 
+  google.maps.event.addDomListener (window, 'load', function () {
+    if (_isInMaps !== false) init_maps (_isInMaps);
+    else _isInMaps = true;
+  });
+
+  setInterval (function () {
+    var l = $('#tabs a').length;
+    var n = $('#tabs a.active').index ();
+    
+    if (n + 1 < l) $('#tabs a.active').next ().click ();
+    else $('#tabs a').first ().click ();
+  }, 30 * 1000);
 });

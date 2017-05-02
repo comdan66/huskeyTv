@@ -333,6 +333,184 @@ html {
   }
 }
 
+
+.p2 {
+  @include clearfix();
+  padding: 16px;
+  .maps {
+    position: relative;
+    float: left;
+    display: inline-block;
+
+    > div {
+      position: absolute;
+      left: 0;
+      top: 0;
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+
+      a[href^="http://maps.google.com/maps"], a[href^="https://maps.google.com/maps"] {
+        display: none !important;
+      }
+
+      .gmnoprint.gm-bundled-control, .gm-style-cc {
+        display: none;
+      }
+    }
+    > span {
+      position: absolute;
+      bottom: -1px;
+      right: -1px;
+      
+      display:flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: center;
+
+      height: 45px + 1px;
+      line-height: 45px + 5px;
+      padding: 0 16px;
+      color: white;
+      z-index: 2;
+      font-size: 24px;
+      background-color: rgba(0, 0, 0, 1.00);
+      @include border-top-left-radius(5px);
+
+      a {
+        margin-top: 5px;
+        margin-right: 5px;
+      }
+    }
+  }
+  &.n1 {
+    > .maps {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  &.n2 {
+    > .maps {
+      width: calc(50% - 16px / 2);
+      height: 100%;
+      + .maps {
+        margin-left: 16px;
+      }
+    }
+  }
+  &.n3 {
+    > .maps {
+      width: calc(50% - 16px / 2);
+      &:nth-child(3n + 1) {
+        height: 100%;
+      }
+      &:nth-child(3n + 2), &:nth-child(3n + 3) {
+        float: right;
+        height: calc(50% - 16px / 2);
+      }
+      &:nth-child(3n + 3) {
+        margin-top: 16px;
+      }
+    }
+  }
+  &.n4 {
+    > .maps {
+      width: calc(50% - 16px / 2);
+      height: calc(50% - 16px / 2);
+
+      &:nth-child(2n + 2) {
+        margin-left: 16px;
+      }
+      &:nth-child(n + 3) {
+        margin-top: 16px;
+      }
+    }
+  }
+  &.n5 {
+    > .maps {
+      height: calc(50% - 16px / 2);
+      &:nth-child(5n + 1), &:nth-child(5n + 2) {
+        width: calc(100% / 2 - 16px / 2);
+      }
+      &:nth-child(5n + 2) {
+        margin-left: 16px;
+      }
+      &:nth-child(5n + 3), &:nth-child(5n + 4), &:nth-child(5n + 5) {
+        width: calc(100% / 3 - 16px * 2 / 3);
+        margin-top: 16px;
+      }
+      &:nth-child(5n + 4), &:nth-child(5n + 5) {
+        margin-left: 16px;
+      }
+    }
+  }
+  &.n6 {
+    > .maps {
+      height: calc(50% - 16px / 2);
+      &:nth-child(3n + 1), &:nth-child(3n + 2), &:nth-child(3n + 3) {
+        width: calc(100% / 3 - 16px * 2 / 3);
+      }
+      &:nth-child(3n + 2) {
+        margin-left: 16px;
+        margin-right: 16px;
+      }
+      &:nth-child(n + 4) {
+        margin-top: 16px;
+      }
+    }
+  }
+  &.n7 {
+    > .maps {
+      &:nth-child(7n + 1), &:nth-child(7n + 4), &:nth-child(7n + 7) {
+        height: calc(100% / 3 - 16px * 2 / 3);
+        width: calc(100% / 3 - 16px * 2 / 3 + 150px);
+      }
+      &:nth-child(7n + 4) {
+        margin-top: 16px;
+        margin-bottom: 16px;
+      }
+      &:nth-child(7n + 2), &:nth-child(7n + 3), &:nth-child(7n + 5), &:nth-child(7n + 6) {
+        float: right;
+        width: calc(100% / 3 - 16px * 2 / 3 - 150px / 2);
+        height: calc(50% - 16px / 2);
+      }
+      &:nth-child(7n + 2), &:nth-child(7n + 5) {
+        margin-left: 16px;
+      }
+      &:nth-child(7n + 5), &:nth-child(7n + 6) {
+        margin-top: 16px;
+      }
+    }
+  }
+  &.n8 {
+    > .maps {
+      height: calc(50% - 16px / 2);
+      width: calc(100% / 4 - 16px * 3 / 4);
+
+      &:nth-child(4n + 2), &:nth-child(4n + 3), &:nth-child(4n + 4) {
+        margin-left: 16px;
+      }
+      &:nth-child(n + 5) {
+        margin-top: 16px;
+      }
+    }
+  }
+  &.n9 {
+    > .maps {
+      height: calc(100% / 3 - 16px * 2 / 3);
+      width: calc(100% / 3 - 16px * 2 / 3);
+
+      &:nth-child(3n + 2) {
+        margin-right: 16px;
+        margin-left: 16px;
+      }
+      &:nth-child(n + 4) {
+        margin-top: 16px;
+      }
+    }
+  }
+}
 #line-chart {
   width: 100%;
   height: 100%;
