@@ -292,7 +292,7 @@ html {
     .desc {
       display: inline-block;
       position: absolute;
-      left: 50px;
+      left: 100px;
       top: -30px;
 
       >span {
@@ -582,61 +582,60 @@ html {
     top: -100%;
     @include opacity(0);
   }
-  > div:first-child {
+  > img {
     position: absolute;
-    left: 0;
-    top: calc(50% - 100px / 5 - 10%);
-    
-    display:flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
-
-    width: 100%;
-    height: 100px;
-
-    img {
-      width: 150px;
-      height: 60px;
-    }
-    > div {
-      color: white;
-      font-size: 30px;
-      height: 45px;
-      line-height: 45px;
-      margin-left: 10px;
-      @include opacity(.75);
-    }
+    left: calc(50% - 200px / 2);
+    top: calc(50% - 80px / 2 - 100px);
+    display: inline-block;
+    width: 200px;
+    height: 80px;
   }
-  > div:last-child {
+  > div:nth-child(2) {
     position: absolute;
     left: 0;
-    top: calc(50% - 100px / 5 - 10% + 100px);
-
-    display:flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
+    display: inline-block;
+    top: calc(50% - 100px / 5 - 100px + 80px + 32px);
     width: 100%;
-
-    margin: 0 auto;
-    
-    i {
+    height: 45px;
+    text-align: center;
+    > div {
       display: inline-block;
-      width: 25px;
-      height: 25px;
-      @include border-radius(50%);
-      background-color: rgba(255, 255, 255, 0.6);
-      @include animation(l 1.4s infinite ease-in-out both);
-      margin: 8px;
-      @for $i from 1 through 2 {
-        &:nth-child(#{$i + 1}) {
-          @include animation-delay(0.16s * $i);
+
+      margin: 0 auto;
+      @include clearfix();
+      
+      i {
+        float: left;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        @include border-radius(50%);
+        background-color: rgba(255, 255, 255, 0.6);
+        @include animation(l 1.4s infinite ease-in-out both);
+        margin: 8px;
+        @for $i from 1 through 2 {
+          &:nth-child(#{$i + 1}) {
+            @include animation-delay(0.16s * $i);
+          }
         }
       }
     }
+  }
+  > div:nth-child(3) {
+    position: absolute;
+    left: 0;
+    top: calc(50% - 100px / 5 - 100px + 80px + 16px + 45px + 8px);
+    
+    display: inline-block;
+    width: 100%;
+    height: 45px;
+    line-height: 45px;
+
+    color: white;
+    font-size: 23px;
+    margin-left: 10px;
+    @include opacity(.75);
+    // }
   }
 }
 
