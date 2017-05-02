@@ -31,6 +31,7 @@ $(function () {
     all2: $('.unit.all2'),
   };
   var $online = $('#online');
+  var $loading = $('#loading');
   var $lineChart = $('#line-chart')
 
   function update_units (r) {
@@ -103,18 +104,22 @@ $(function () {
       $online.text (r.online);
       update_units (r);
       update_line_chart (r);
+      
+      $loading.addClass ('h');
+
       console.error ('x');
     });
   }
   function update_page_1 () {
-    
+    $loading.addClass ('h');
   }
 
   $('#tabs a').click (function () {
+    $loading.removeClass ('h');
     $(this).addClass ('active').siblings ().removeClass ('active');
     $('#panels > div').eq ($(this).index ()).addClass ('active').siblings ().removeClass ('active');
     eval ('update_page_' + $(this).index () + '();');
-  }).first ().click ();
+  }).eq (1).click ();
   
 
 });
