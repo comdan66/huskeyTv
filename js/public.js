@@ -119,7 +119,7 @@ $(function () {
     $(this).addClass ('active').siblings ().removeClass ('active');
     $('#panels > div').eq ($(this).index ()).addClass ('active').siblings ().removeClass ('active');
     eval ('update_page_' + $(this).index () + '();');
-  }).eq (1).click ();
+  }).eq (0).click ();
   
 
 });
