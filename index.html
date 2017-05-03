@@ -20,38 +20,30 @@
     <div id='tabs'>
       <a>數據報表</a>
       <a>地圖分佈</a>
+      <a>訂單走勢</a>
       <span class='icon-user'>活躍使用者：<b id='online'>0</b> 人</span>
     </div>
+
     <div id='panels'>
-      <div class='p1'>
-        <div class='row r1'>
-          <div class='unit all1'></div>
-          <div class='unit taipei'></div>
-          <div class='unit hsinchu'></div>
-          <div class='unit taichung'></div>
-        </div>
-        <div class='row r2'>
-          <div class='unit all2'></div>
-          <div class='unit tainan'></div>
-          <div class='unit kaohsiung'></div>
-          <div class='unit other'></div>
-        </div>
-        <div class='row r3'>
-          <div id='line-chart'></div>
-          <div class='desc'>
-            <span>每小時訂單量</span>
-            <div><span>今日</span><span>上週同期</span></div>
-          </div>
-        </div>        
+      <div class='p0'>
+        <div class='row r1'><div class='unit all1'></div><div class='unit taipei'></div><div class='unit hsinchu'></div><div class='unit taichung'></div></div>
+        <div class='row r2'><div class='unit all2'></div><div class='unit tainan'></div><div class='unit kaohsiung'></div><div class='unit other'></div></div>
+        <div class='row r3'><div class='line-chart'></div><div class='desc'><span>每小時訂單量</span><div><span>今日</span><span>上週同期</span></div></div></div>        
       </div>
 
-      <div class='p2'></div>
+      <div class='p1'></div>
+      <div class='p2'>
+        <div><div class='line-chart chart_year'></div><div class='desc'><span><b>年</b> 訂單量</span><div><span>今年</span><span>去年</span></div></div></div>
+        <div><div class='line-chart chart_month'></div><div class='desc'><span><b>月</b> 訂單量</span><div><span>本月</span><span>上月</span></div></div></div>
+        <div><div class='line-chart chart_week'></div><div class='desc'><span><b>週</b> 訂單量</span><div><span>本週</span><span>上週</span></div></div></div>
+      </div>
     </div>
 
     <div id='loading'>
-      <img src='img/elephant_animation_3.gif'>
+      <img src='<?php echo base_url ('assets/images/elephant_animation_3.gif');?>'>
       <div><div><i></i><i></i><i></i></div></div>
       <div>資料讀取中，請稍候..</div>
     </div>
+
   </body>
 </html>
